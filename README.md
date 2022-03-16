@@ -1,5 +1,4 @@
-# DXProgressBar
-## _Square progress bar because why not_ 😎
+# Square progress bar because why not 😎
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
@@ -15,7 +14,7 @@
 ## Installation
 ```sh
 dependencies:
-  dx_progress_bar: ^1.0.0
+  square_progress_bar: ^1.0.0
 ```
 ## Getting started
 Just provide the progress percentage in a range from 0.0 to 1.0 and you are set to go.
