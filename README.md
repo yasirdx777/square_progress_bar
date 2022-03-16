@@ -14,7 +14,7 @@
 ## Installation
 ```sh
 dependencies:
-  square_progress_bar: ^1.0.0
+  square_progress_bar: ^1.0.1
 ```
 ## Getting started
 Just provide the progress percentage in a range from 0.0 to 1.0 and you are set to go.
