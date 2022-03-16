@@ -15,7 +15,7 @@
 ## Installation
 ```sh
 dependencies:
-  dx_progress_bar: ^0.0.1
+  dx_progress_bar: ^1.0.0
 ```
 ## Getting started
 Just provide the progress percentage in a range from 0.0 to 1.0 and you are set to go.
