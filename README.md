@@ -9,12 +9,12 @@
 - Gradient color bar support
 - ✨Magic✨
 
-![alt text](img/DXProgressBar.gif)
+![alt text](https://raw.githubusercontent.com/yasirdx777/DXProgressBar/main/img/DXProgressBar.gif)
 
 ## Installation
 ```sh
 dependencies:
-  square_progress_bar: ^1.0.1
+  square_progress_bar: ^1.0.2
 ```
 ## Getting started
 Just provide the progress percentage in a range from 0.0 to 1.0 and you are set to go.
