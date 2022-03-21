@@ -1,28 +1,38 @@
 library square_progress_bar;
 
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:square_progress_bar/radial_painter.dart';
 
 // ignore: must_be_immutable
 class SquareProgressBar extends StatefulWidget {
-  final double percentage; // 0.0 ... 1.0
+  final double progress;
+  double? width;
+  double? height;
   final Color solidBarColor;
   final Color emptyBarColor;
   final double strokeWidth;
+  final StrokeCap barStrokeCap;
   LinearGradient? gradientBarColor;
   final bool isAnimation;
-  final int animationDuration;
+  final Duration animationDuration;
+  final bool isRtl;
   Widget? child;
 
   SquareProgressBar({
     Key? key,
-    required this.percentage,
+    required this.progress,
     this.solidBarColor = Colors.blue,
     this.emptyBarColor = Colors.grey,
     this.gradientBarColor,
     this.strokeWidth = 15,
+    this.barStrokeCap = StrokeCap.round,
     this.isAnimation = false,
-    this.animationDuration = 2,
+    this.animationDuration = const Duration(seconds: 2),
+    this.isRtl = false,
+    this.width,
+    this.height,
     this.child,
   }) : super(key: key);
 
@@ -32,17 +42,21 @@ class SquareProgressBar extends StatefulWidget {
 
 class _SquareProgressBarState extends State<SquareProgressBar>
     with SingleTickerProviderStateMixin {
-  late AnimationController animationController;
+  AnimationController? animationController;
 
   @override
   void initState() {
     super.initState();
+
+    if (!widget.isAnimation) return; // only initiate the animation controller if isAnimation is true
+
     animationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: widget.animationDuration),
+      duration: widget.animationDuration,
     );
 
-    animationController.forward();
+    // start animate one time
+    animationController?.forward();
   }
 
   @override
@@ -50,22 +64,44 @@ class _SquareProgressBarState extends State<SquareProgressBar>
     return LayoutBuilder(
       builder: (context, constraint) {
         return SizedBox(
-          width: constraint.biggest.width,
-          height: constraint.biggest.height,
-          child: CustomPaint(
-            painter: RadialPainter(
-              animationController: animationController,
-              progress: widget.percentage,
-              isAnimation: widget.isAnimation,
-              solidBarColor: widget.solidBarColor,
-              emptyBarColor: widget.emptyBarColor,
-              gradientBarColor: widget.gradientBarColor,
-              strokeWidth: widget.strokeWidth,
+          width: widget.width ??
+              constraint.biggest
+                  .width, // if width is not specified the progress bar width will set to biggest width available
+          height: widget.height ??
+              constraint.biggest
+                  .height, // if height is not specified the progress bar height will set to biggest height available
+          child: Transform(
+            // if isRtl is true the progres bar will rotate 180°
+            alignment: Alignment.center,
+            transform: Matrix4.rotationY(widget.isRtl ? math.pi : 0),
+            child: CustomPaint(
+              painter: RadialPainter(
+                animationController: animationController,
+                progress: widget.progress,
+                isAnimation: widget.isAnimation,
+                solidBarColor: widget.solidBarColor,
+                emptyBarColor: widget.emptyBarColor,
+                gradientBarColor: widget.gradientBarColor,
+                strokeWidth: widget.strokeWidth,
+                barStrokeCap: widget.barStrokeCap,
+              ),
+              child: Transform(
+                // if isRtl is true the progres bar child widget will rotate 180° which will rotate the child widget to it's original angle
+                alignment: Alignment.center,
+                transform: Matrix4.rotationY(widget.isRtl ? math.pi : 0),
+                child: widget.child,
+              ),
             ),
-            child: widget.child,
           ),
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    // disposing the animation controller for preventing memory leak
+    animationController?.dispose();
+    super.dispose();
   }
 }

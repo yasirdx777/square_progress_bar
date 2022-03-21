@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 
 class RadialPainter extends CustomPainter {
-  final AnimationController animationController;
-  late Animation<double> _animation;
-  final double progress;
-  double _barProgress = 0.0;
-  final Color solidBarColor;
-  final Color emptyBarColor;
-  final LinearGradient? gradientBarColor;
-  final double strokeWidth;
-  final bool isAnimation;
+  final AnimationController?
+      animationController; // animation controller for controlling progress bar animation start and reset
+  late Animation<double>
+      _animation; // the animation var is used to hold the continuous value of the animated from 0.0 to max progress value
+  final double progress; // the max value of the progress
+  double _barProgress = 0.0; // the current progress of the bar
+  final Color solidBarColor; // the color of the main bar
+  final Color emptyBarColor; // the color of the empty space
+  final LinearGradient?
+      gradientBarColor; // the gradient color, if it's not null it will be used instead of solid color for main bar
+  final double strokeWidth; // for specify the main bar Width
+  final StrokeCap
+      barStrokeCap; // for specify the main bar head shape either rounded or square
+  final bool
+      isAnimation; // for enable or disable animate the progress of the main bar
 
   RadialPainter({
     required this.animationController,
@@ -18,19 +24,22 @@ class RadialPainter extends CustomPainter {
     required this.emptyBarColor,
     required this.gradientBarColor,
     required this.strokeWidth,
+    required this.barStrokeCap,
     required this.isAnimation,
   }) : super(repaint: animationController);
 
+  // specify the base line shape and color for draw the empty space bar
   Paint paintEmptyBar() {
     final Paint paintBase = Paint()
       ..strokeWidth = strokeWidth
-      ..color = emptyBarColor.withOpacity(0.2)
+      ..color = emptyBarColor
       ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.square;
+      ..strokeCap = barStrokeCap;
 
     return paintBase;
   }
 
+  // specify the base line size draw start and end point
   Path createEmptyBarBasePath(Size size) {
     final Path pathBase = Path();
 
@@ -49,14 +58,16 @@ class RadialPainter extends CustomPainter {
     return pathBase;
   }
 
+  // specify the main line shape and color for draw the empty space bar
   Paint paintBar(Size size) {
     final Paint paint = Paint()
       ..strokeWidth = strokeWidth
       ..color = solidBarColor
       ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.square;
+      ..strokeCap = barStrokeCap;
 
     if (gradientBarColor != null) {
+      // apply gradient color if it's not null
       final Rect rect = Rect.fromCircle(
         center: Offset(size.width / 2, size.width / 2),
         radius: size.width,
@@ -68,6 +79,12 @@ class RadialPainter extends CustomPainter {
     return paint;
   }
 
+  // specify the main line size draw start and end point
+  // main line have 4 break points that will draw the line in different direction
+  // 1: 0.0 - 0.25: The top line
+  // 2: 0.25 - 0.5: The right line
+  // 3: 0.5 - 0.75: The bottom line
+  // 4: 0.75 - 1.0: The left line which will complate the draw of the square when the porgress rech 1.0 (100%)
   Path createBarPath(Size size, double progress) {
     final Path path = Path();
 
@@ -109,7 +126,6 @@ class RadialPainter extends CustomPainter {
 
       path.moveTo(0, size.height);
       path.quadraticBezierTo(0, size.height, 0, (size.height) * (1 - k));
-    } else if (progress < 0) {
     } else if (progress > 1) {
       path.moveTo(0, 0);
       path.quadraticBezierTo(0, 0, size.width, 0);
@@ -129,18 +145,22 @@ class RadialPainter extends CustomPainter {
     return path;
   }
 
+  // specify the current progress of the main bar size
+  // if it's not animated will set the progress to max value directly
+  // if it's animated the progress value will be set over diffrent time perid in range from 0.0 to the max value
   void setBarProgress() {
     if (!isAnimation) {
       _barProgress = progress;
       return;
     }
 
-    _animation = Tween(begin: 0.0, end: progress).animate(animationController)
+    _animation = Tween(begin: 0.0, end: progress).animate(animationController!)
       ..addListener(() {
         _barProgress = _animation.value;
       });
   }
 
+  // start drawing the progress bar
   @override
   void paint(Canvas canvas, Size size) {
     final Paint emptyBar = paintEmptyBar();
@@ -156,10 +176,11 @@ class RadialPainter extends CustomPainter {
     canvas.drawPath(barPath, bar);
   }
 
+  // redrawing the progress bar if needed and restart the animation if it's enabled
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    animationController.reset();
-    animationController.forward();
+    animationController?.reset();
+    animationController?.forward();
     return true;
   }
 }
