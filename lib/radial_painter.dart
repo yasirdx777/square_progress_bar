@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
 
+// Custom painter to draw the the prgress bar
 class RadialPainter extends CustomPainter {
-  final AnimationController?
-      animationController; // animation controller for controlling progress bar animation start and reset
-  late Animation<double>
-      _animation; // the animation var is used to hold the continuous value of the animated from 0.0 to max progress value
-  final double progress; // the max value of the progress
-  double _barProgress = 0.0; // the current progress of the bar
-  final Color solidBarColor; // the color of the main bar
-  final Color emptyBarColor; // the color of the empty space
-  final LinearGradient?
-      gradientBarColor; // the gradient color, if it's not null it will be used instead of solid color for main bar
-  final double strokeWidth; // for specify the main bar Width
-  final StrokeCap
-      barStrokeCap; // for specify the main bar head shape either rounded or square
-  final bool
-      isAnimation; // for enable or disable animate the progress of the main bar
+  // animation controller for controlling progress bar animation start and reset
+  final AnimationController? animationController;
+  // the animation var is used to hold the continuous value of the animated from 0.0 to max progress value
+  late Animation<double> _animation;
+  // the max value of the progress
+  final double progress;
+  // the current progress of the bar
+  double _barProgress = 0.0;
+  // the color of the main bar
+  final Color solidBarColor;
+  // the color of the empty space
+  final Color emptyBarColor;
+  // the gradient color, if it's not null it will be used instead of solid color for main bar
+  final LinearGradient? gradientBarColor;
+  // for specify the main bar Width
+  final double strokeWidth;
+  // for specify the main bar head shape either rounded or square
+  final StrokeCap barStrokeCap;
+  // for enable or disable animate the progress of the main bar
+  final bool isAnimation;
 
   RadialPainter({
     required this.animationController,

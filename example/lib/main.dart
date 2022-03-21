@@ -13,10 +13,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  double _progress =
-      0.0; // The progress value needs to be in a range from 0.0 to 1.0
-  String _percentageLabel =
-      "0%"; // The percentage label range is from 0 to 100, By multiply _progress by 100.
+  // The progress value needs to be in a range from 0.0 to 1.0
+  double _progress = 0.0;
+  // The percentage label range is from 0 to 100, By multiply _progress by 100.
+  String _percentageLabel = "0%";
 
   @override
   Widget build(BuildContext context) {
