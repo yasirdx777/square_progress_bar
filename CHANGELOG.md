@@ -16,3 +16,7 @@ add example
 - Add RTL support
 - Add documentation
 - Add bar cap shape customization
+
+## 1.1.1
+
+Enhance documentation

@@ -16,7 +16,7 @@
 ## Installation
 ```yaml
 dependencies:
-  square_progress_bar: ^1.1.0
+  square_progress_bar: ^1.1.1
 ```
 ## Getting started
 Just provide the progress in a range from 0.0 to 1.0 and you are set to go.
