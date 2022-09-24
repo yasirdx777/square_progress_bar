@@ -7,7 +7,7 @@
 - Dynamic sizing
 - Animated progress bar
 - Gradient color progress bar
-- Prgreess bar cap shape customization
+- Progress bar cap shape customization
 - RTL support
 - ✨Magic✨
 
